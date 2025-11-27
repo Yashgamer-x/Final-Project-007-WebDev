@@ -6,7 +6,7 @@
       <button class="arrow left"
         v-if="showArrows"
         @click="scrollLeft"
-      >‹</button>
+      >&lt;</button>
 
       <div class="carousel" ref="carousel">
         <div
@@ -22,7 +22,7 @@
       <button class="arrow right"
         v-if="showArrows"
         @click="scrollRight"
-      >›</button>
+      >&gt;</button>
     </div>
   </div>
 </template>
