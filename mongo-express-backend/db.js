@@ -47,7 +47,7 @@ export async function getDB() {
      * - Prefer DB_NAME from .env
      * - Otherwise default to "Library"
      */
-    dbInstance = client.db(process.env.DB_NAME || "Library");
+    dbInstance = client.db(process.env.DB_NAME || "007");
 
     // Return the connected database object
     return dbInstance;

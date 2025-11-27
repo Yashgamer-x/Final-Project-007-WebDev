@@ -10,14 +10,13 @@
         >&lt;</button>
 
         <div class="carousel" ref="carousel">
-        <div
-            v-for="(film, index) in films"
-            :key="index"
-            class="carousel-item"
-        >
-            <img :src="film.imageurl" :alt="film.name" />
-            <p>{{ film.name }}</p>
-        </div>
+            <div
+                v-for="(film, index) in films"
+                :key="index"
+                class="carousel-item">
+                <img :src="film.imageurl" :alt="film.name" />
+                <p>{{ film.name }}</p>
+            </div>
         </div>
 
         <button class="arrow"
@@ -41,7 +40,7 @@
                 <fieldset>
                     <legend>Title</legend>
                     <input type="text" 
-                    v-model="film.title"
+                    v-model="film.name"
                     placeholder="No Time to Die" 
                     required />
                 </fieldset>
@@ -63,7 +62,7 @@
                     <legend>Image URL</legend>
                     <input 
                     type="url" 
-                    v-model="film.imageUrl"
+                    v-model="film.imageurl"
                     placeholder="https://example.com/notime.jpg" 
                     required 
                     />
@@ -103,10 +102,10 @@ const showArrows = ref(false);
 const showModal = ref(false);
 const actors = ref([]);
 const film = ref({
-  title: "",
+  name: "",
   description: "",
   releaseDate: "",
-  imageUrl: ""
+  imageurl: ""
 });
 
 
@@ -128,8 +127,27 @@ function openFilmModal(){
     showModal.value = true;
 }
 
+async function getFilms() {
+  const res = await fetch("http://localhost:3000/api/films");
+  return res.json();
+}
+
+function addNewFilm(film){
+    return fetch("http://localhost:3000/api/add/film", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(film)
+    });
+}
+
 function closeFilmModal() {
     showModal.value = false;
+    film.value = { 
+        name: "", 
+        description: "", 
+        releaseDate: "", 
+        imageurl: "" 
+    };
     actors.value.splice(0, actors.value.length);
 }
 
@@ -137,45 +155,44 @@ function addActor() {
     actors.value.push("");
 }
 
+
+
 async function submitFilm() {
   const payload = {
-    title: film.value.title,
+    name: film.value.name,
     description: film.value.description,
     releaseDate: film.value.releaseDate,
-    imageUrl: film.value.imageUrl,
+    imageurl: film.value.imageurl,
     actors: actors.value
   };
 
   try {
-    const res = await fetch("http://localhost:3000/api/add/film", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
+    const res = await addNewFilm(payload);
 
-    if (!res.ok) throw new Error("Failed to add film");
+    if (res.status !== 201) throw new Error("Failed to add film");
     const data = await res.json();
     console.log("Film added:", data);
 
     // reset form
     film.value = { 
-        title: "", 
+        name: "", 
         description: "", 
         releaseDate: "", 
-        imageUrl: "" 
+        imageurl: "" 
     };
-    
     actors.value = [""];
-    closeFilmModal();
+
+    films.value = await getFilms();
   } catch (err) {
-    console.error(err);
+    console.log(err);
+  } finally{
+    checkOverflow();
+    closeFilmModal();
   }
 }
 
-
 onMounted(async () => {
-    const res = await fetch("http://localhost:3000/api/films");
-    films.value = await res.json();
+    films.value = await getFilms();
     setTimeout(checkOverflow);
     window.addEventListener('resize', checkOverflow);
 });

@@ -1,5 +1,5 @@
 // Import core dependencies
-import express from "express";   // Web framework for building API routes
+import express, { json } from "express";   // Web framework for building API routes
 import cors from "cors";        // Enables cross-origin requests (Vue → Express)
 import { getDB } from "./db.js"; // Custom function to connect to MongoDB Atlas
 import dotenv from "dotenv";     // Loads environment variables from .env
@@ -53,6 +53,32 @@ app.get("/api/films", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+app.post("/api/add/film", async (req, res) => {
+  try {
+    const db = await getDB();
+    const filmCollection = db.collection("Movies");
+
+    const film = req.body;
+
+    const result = await filmCollection.insertOne({
+      name: film.name,
+      description: film.description,
+      releaseDate: new Date(film.releaseDate),
+      imageurl: film.imageurl
+    });
+
+    return res.status(201).json({
+      message: "Film added successfully",
+      insertedId: result.insertedId
+    });
+
+  } catch (err) {
+    console.error("Error Uploading items:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 
 // ----------------------
 // Start the Server
