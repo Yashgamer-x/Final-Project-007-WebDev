@@ -29,8 +29,8 @@
     <div v-if="showFilmModal" class="modal-overlay">
         <div style="position: relative;" class="modal-content">
             <button class="close-btn" 
-        @click="closeFilmModal"
-        style="position: absolute; left: 10px; top: 0;">Close</button>
+            @click="closeFilmModal"
+            style="position: absolute; left: 10px; top: 0;">Close</button>
             <h2>
                 {{ showFilmModalObject.name }} 
                 ({{ new Date(showFilmModalObject.releaseDate).toLocaleDateString('en-US') }})
@@ -225,6 +225,7 @@ async function submitFilm() {
 
 onMounted(async () => {
     films.value = await getFilms();
+    films.value.sort((a, b)=> new Date(b.releaseDate) - new Date(a.releaseDate));
     setTimeout(checkOverflow);
     window.addEventListener('resize', checkOverflow);
 });
