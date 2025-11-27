@@ -38,6 +38,23 @@
                 <legend>Title</legend>
                 <input type="text" name="Title" id="title" placeholder="No Time to Die" required />
             </fieldset>
+            <fieldset>
+                <legend>Description</legend>
+                 <textarea 
+                    name="description" 
+                    id="description" 
+                    placeholder="Type the description here" 
+                    required
+                ></textarea>
+            </fieldset>
+            <fieldset>
+                <legend>Date</legend>
+                <input type="date" name="releaseDate" id="releaseDate" required />
+            </fieldset>
+            <fieldset>
+                <legend>Image URL</legend>
+                <input type="text" name="Title" id="title" placeholder="No Time to Die" required />
+            </fieldset>
         </form>
         <button class="close-btn" @click="closeFilmModal">Close</button>
       </div>
@@ -257,7 +274,7 @@ onUnmounted( async () => {
 fieldset {
     border: 2px solid gold;
     border-radius: 20px;
-    margin: 0;
+    margin: 10px 0px;
     padding: 0 15px 10px 15px;
 }
 
@@ -269,6 +286,10 @@ legend {
     text-align: left;
     padding-left: 5px;
     padding-right: 5px;
+}
+
+fieldset:focus-within {
+    box-shadow: 0 0 20px gold;
 }
 
 input[type="text"] {
@@ -296,6 +317,43 @@ input[type="text"]:not(:focus):valid {
     text-shadow: 4px 0px 5px goldenrod;
 }
 
+textarea {
+    width: 100%;
+    min-height: 120px;
+    resize: vertical;
+    border: none;
+    background: transparent;
+    padding: 8px 0;
+    font-size: 16px;
+    color: gold;
+    border-bottom: 2px solid #aaa;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+textarea:focus{
+    outline: none;
+    border-bottom: 2px solid gold;
+}
+
+textarea:focus:valid{
+    text-shadow: 4px 0px 5px goldenrod;
+}
+
+textarea:not(:focus):valid{
+    text-shadow: 4px 0px 5px goldenrod;
+    border-bottom: 2px solid rgb(129, 110, 2);
+}
+
+input[type="date"] {
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: 8px 0;
+    font-size: 16px;
+    color: white;
+    border-bottom: 2px solid #aaa; /* underline style */
+}
 
 
 img[src$=".svg"] {
