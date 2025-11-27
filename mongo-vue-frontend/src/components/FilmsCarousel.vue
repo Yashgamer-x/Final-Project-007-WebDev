@@ -33,9 +33,12 @@
     <div v-if="showModal" class="modal-overlay">
       <div class="modal-content">
         <h2>Add Film</h2>
-        <!-- Empty modal body for now -->
-        <p>Modal content goes here...</p>
-
+        <form action="" method="post">
+            <fieldset>
+                <legend>Title</legend>
+                <input type="text" name="Title" id="title" placeholder="No Time to Die" required />
+            </fieldset>
+        </form>
         <button class="close-btn" @click="closeFilmModal">Close</button>
       </div>
     </div>
@@ -244,6 +247,55 @@ onUnmounted( async () => {
     background: black;
     color: gold;
 }
+
+.form-group {
+    width: 300px;
+    margin: 20px auto;
+    font-family: 'Roboto', sans-serif;
+}
+
+fieldset {
+    border: 2px solid gold;
+    border-radius: 20px;
+    margin: 0;
+    padding: 0 15px 10px 15px;
+}
+
+legend {
+    font-size: 14px;
+    color: gold;
+    font-family: 'Cinzel', serif;
+    margin-bottom: 5px;
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+input[type="text"] {
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: 8px 0;
+    font-size: 16px;
+    color: gold;
+    border-bottom: 2px solid #aaa;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-bottom: 2px solid gold;
+}
+
+input[type="text"]:focus:valid{
+    text-shadow: 4px 0px 5px goldenrod;
+}
+
+/* Not in focus and is a valid input */
+input[type="text"]:not(:focus):valid {
+    border-bottom: 2px solid rgb(129, 110, 2);
+    text-shadow: 4px 0px 5px goldenrod;
+}
+
 
 
 img[src$=".svg"] {
