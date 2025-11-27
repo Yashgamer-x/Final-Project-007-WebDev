@@ -299,26 +299,6 @@ onUnmounted( async () => {
     margin-top: 10px;
 }
 
-.add-film-btn {
-    background: black;
-    color: gold;
-    font-family: 'Cinzel', serif;
-    font-size: 1.2rem;
-    font-weight: bold;
-    border: 2px solid gold;
-    border-radius: 8px;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.add-film-btn:hover {
-    background: gold;
-    color: black;
-    transform: scale(1.05);
-    box-shadow: 0 0 10px gold;
-}
-
 .modal-overlay {
     position: fixed;
     top: 0;
