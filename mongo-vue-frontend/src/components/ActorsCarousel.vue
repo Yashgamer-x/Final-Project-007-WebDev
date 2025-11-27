@@ -15,7 +15,7 @@
           :key="index"
           class="carousel-item"
         >
-          <img :src="actor.image" :alt="actor.name" />
+          <img :src="actor.imageurl" :alt="actor.name" />
           <p>{{ actor.name }}</p>
         </div>
       </div>

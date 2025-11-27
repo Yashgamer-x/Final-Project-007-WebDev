@@ -79,6 +79,25 @@ app.post("/api/add/film", async (req, res) => {
   }
 });
 
+app.get("/api/actors", async (req, res) => {
+  try {
+    // Connect to MongoDB (cached connection in db.js)
+    const db = await getDB();
+
+    // Fetch all documents from the "Books" collection
+    const items = await db.collection("Actors").find().toArray();
+
+    // Send JSON response back to frontend
+    res.json(items);
+  } catch (err) {
+    // Log errors to backend console
+    console.error("Error fetching items:", err);
+
+    // Send generic error to frontend
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 
 // ----------------------
 // Start the Server
