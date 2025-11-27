@@ -23,7 +23,7 @@
       <button class="arrow"
         v-if="showArrows"
         @click="scrollRight"
-      >&t;</button>
+      >&gt;</button>
     </div>
   </div>
 </template>

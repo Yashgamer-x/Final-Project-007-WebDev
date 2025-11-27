@@ -26,7 +26,18 @@
         >&gt;</button>
     </div>
     <div class="add-film-wrapper">
-        <button class="add-film-btn">Add Film</button>
+        <button class="add-film-btn"
+        @click="openFilmModal">Add Film</button>
+    </div>
+    <!-- Modal -->
+    <div v-if="showModal" class="modal-overlay">
+      <div class="modal-content">
+        <h2>Add Film</h2>
+        <!-- Empty modal body for now -->
+        <p>Modal content goes here...</p>
+
+        <button class="close-btn" @click="closeFilmModal">Close</button>
+      </div>
     </div>
 </div>
 </template>
@@ -38,6 +49,8 @@ import { ref, onMounted, onUnmounted } from "vue";
 const films = ref([]);
 const carousel = ref(null);
 const showArrows = ref(false);
+const showModal = ref(false);
+
 
 function checkOverflow() {
     if (!carousel.value) return;
@@ -51,6 +64,15 @@ function scrollLeft() {
 function scrollRight() {
     carousel.value.scrollBy({ left: 220, behavior: "smooth" });
 }
+
+function openFilmModal(){
+    showModal.value = true;
+}
+
+function closeFilmModal() {
+  showModal.value = false;
+}
+
 
 onMounted(async () => {
     const res = await fetch("http://localhost:3000/api/films");
@@ -84,7 +106,7 @@ onUnmounted( async () => {
     display: flex;
     overflow-x: auto;
     gap: 20px;
-    padding: 10px;
+    padding: 30px 10px;
     scroll-behavior: smooth;
     max-width: 100%;
     scrollbar-width: none; 
@@ -100,11 +122,12 @@ onUnmounted( async () => {
     padding: 10px;
     color: gold;
     font-family: 'Cinzel', serif;
-    transition: transform 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .carousel-item:hover {
     transform: scale(1.05);
+    box-shadow: 0 0 20px gold;
 }
 
 .carousel-item img {
@@ -152,6 +175,74 @@ onUnmounted( async () => {
     color: black;
     transform: scale(1.05);
     box-shadow: 0 0 10px gold;
+}
+
+.add-film-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.add-film-btn {
+    background: black;
+    color: gold;
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: 2px solid gold;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-film-btn:hover {
+    background: gold;
+    color: black;
+    transform: scale(1.05);
+    box-shadow: 0 0 10px gold;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(17, 17, 17, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.modal-content {
+    background: black;
+    border: 2px solid gold;
+    border-radius: 10px;
+    padding: 30px;
+    width: 400px;
+    text-align: center;
+    color: gold;
+    font-family: 'Cinzel', serif;
+    box-shadow: 0 0 20px gold;
+}
+
+.close-btn {
+    margin-top: 20px;
+    background: gold;
+    color: black;
+    border: none;
+    padding: 8px 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    background: black;
+    color: gold;
 }
 
 
