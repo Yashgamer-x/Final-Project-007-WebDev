@@ -1,3 +1,4 @@
+<!-- HTML -->
 <template>
   <footer class="bond-footer">
     <div class="footer-text">
@@ -6,6 +7,7 @@
   </footer>
 </template>
 
+<!-- CSS -->
 <style scoped>
 .bond-footer {
   background: black;

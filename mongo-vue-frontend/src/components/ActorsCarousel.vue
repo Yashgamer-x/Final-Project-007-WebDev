@@ -1,3 +1,4 @@
+<!-- HTML -->
 <template>
   <div id="actors">
     <h1 class="text-align-center">Actors</h1>
@@ -22,11 +23,12 @@
       <button class="arrow right"
         v-if="showArrows"
         @click="scrollRight"
-      >&gt;</button>
+      >&t;</button>
     </div>
   </div>
 </template>
 
+<!-- JavaScript -->
 <script setup>
 import { ref, onMounted } from "vue";
 
@@ -54,6 +56,7 @@ onMounted(async () => {
 });
 </script>
 
+<!-- CSS -->
 <style scoped>
 .text-align-center {
   text-align: center;
