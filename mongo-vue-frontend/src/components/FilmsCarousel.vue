@@ -4,7 +4,7 @@
     <h1 class="text-align-center">Films</h1>
 
     <div class="carousel-wrapper">
-        <button class="arrow left"
+        <button class="arrow"
         v-if="showArrows"
         @click="scrollLeft"
         >&lt;</button>
@@ -20,7 +20,7 @@
         </div>
         </div>
 
-        <button class="arrow right"
+        <button class="arrow"
         v-if="showArrows"
         @click="scrollRight"
         >&gt;</button>
