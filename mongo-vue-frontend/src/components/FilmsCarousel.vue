@@ -49,11 +49,20 @@
             </fieldset>
             <fieldset>
                 <legend>Date</legend>
-                <input type="date" name="releaseDate" id="releaseDate" required />
+                <input type="date"
+                name="releaseDate" 
+                id="releaseDate" 
+                required />
             </fieldset>
             <fieldset>
                 <legend>Image URL</legend>
-                <input type="text" name="Title" id="title" placeholder="No Time to Die" required />
+                <input 
+                type="url" 
+                name="imageUrl" 
+                id="imageUrl" 
+                placeholder="https://example.com/notime.jpg" 
+                required 
+                />
             </fieldset>
         </form>
         <button class="close-btn" @click="closeFilmModal">Close</button>
@@ -352,7 +361,41 @@ input[type="date"] {
     padding: 8px 0;
     font-size: 16px;
     color: white;
-    border-bottom: 2px solid #aaa; /* underline style */
+    border-bottom: 2px solid #aaa;
+}
+
+input[type="date"]:focus {
+    outline: none;
+    border-bottom: 2px solid gold;
+    color: gold;
+}
+
+input[type="date"]:not(:focus):valid {
+    color: gold;
+    border-bottom: 2px solid rgb(129, 110, 2);
+}
+
+input[type="url"] {
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: 8px 0;
+    font-size: 16px;
+    color: gold;
+    border-bottom: 2px solid #aaa;
+}
+
+input[type="url"]:focus {
+    outline: none;
+    border-bottom: 2px solid gold;
+}
+
+input[type="url"]:not(:focus):valid {
+  border-bottom: 2px solid rgb(129, 110, 2);
+}
+
+textarea:focus:valid{
+    text-shadow: 4px 0px 5px goldenrod;
 }
 
 
