@@ -31,41 +31,63 @@
     </div>
     <!-- Modal -->
     <div v-if="showModal" class="modal-overlay">
-      <div class="modal-content">
+      <div style="position: relative;" class="modal-content">
+        <button class="close-btn" 
+        @click="closeFilmModal"
+        style="position: absolute; left: 10px; top: 0;">Close</button>
         <h2>Add Film</h2>
-        <form action="" method="post">
-            <fieldset>
-                <legend>Title</legend>
-                <input type="text" name="Title" id="title" placeholder="No Time to Die" required />
-            </fieldset>
-            <fieldset>
-                <legend>Description</legend>
-                 <textarea 
-                    name="description" 
-                    id="description" 
-                    placeholder="Type the description here" 
-                    required
-                ></textarea>
-            </fieldset>
-            <fieldset>
-                <legend>Date</legend>
-                <input type="date"
-                name="releaseDate" 
-                id="releaseDate" 
-                required />
-            </fieldset>
-            <fieldset>
-                <legend>Image URL</legend>
-                <input 
-                type="url" 
-                name="imageUrl" 
-                id="imageUrl" 
-                placeholder="https://example.com/notime.jpg" 
-                required 
-                />
-            </fieldset>
-        </form>
-        <button class="close-btn" @click="closeFilmModal">Close</button>
+        <div class="form-scroll">
+            <form @submit.prevent="submitFilm">
+                <fieldset>
+                    <legend>Title</legend>
+                    <input type="text" 
+                    v-model="film.title"
+                    placeholder="No Time to Die" 
+                    required />
+                </fieldset>
+                <fieldset>
+                    <legend>Description</legend>
+                    <textarea 
+                        v-model="film.description" 
+                        placeholder="Type the description here" 
+                        required
+                    ></textarea>
+                </fieldset>
+                <fieldset>
+                    <legend>Date</legend>
+                    <input type="date"
+                    v-model="film.releaseDate" 
+                    required />
+                </fieldset>
+                <fieldset>
+                    <legend>Image URL</legend>
+                    <input 
+                    type="url" 
+                    v-model="film.imageUrl"
+                    placeholder="https://example.com/notime.jpg" 
+                    required 
+                    />
+                </fieldset>
+                <div v-for="(actor, index) in actors" 
+                :key="index">
+                    <fieldset>
+                        <legend>Actor {{ index + 1 }}</legend>
+                        <input 
+                        type="text" 
+                        v-model="actors[index]" 
+                        :id="'actor' + index" 
+                        required 
+                        />
+                    </fieldset>
+                </div>
+                <button type="button" 
+                class="close-btn"
+                @click="addActor">Add Actor</button>
+                <br><br>
+                <button type="submit" 
+                class="add-film-btn">Submit Film</button>
+            </form>
+        </div>
       </div>
     </div>
 </div>
@@ -79,6 +101,14 @@ const films = ref([]);
 const carousel = ref(null);
 const showArrows = ref(false);
 const showModal = ref(false);
+const actors = ref([]);
+const film = ref({
+  title: "",
+  description: "",
+  releaseDate: "",
+  imageUrl: ""
+});
+
 
 
 function checkOverflow() {
@@ -99,7 +129,47 @@ function openFilmModal(){
 }
 
 function closeFilmModal() {
-  showModal.value = false;
+    showModal.value = false;
+    actors.value.splice(0, actors.value.length);
+}
+
+function addActor() {
+    actors.value.push("");
+}
+
+async function submitFilm() {
+  const payload = {
+    title: film.value.title,
+    description: film.value.description,
+    releaseDate: film.value.releaseDate,
+    imageUrl: film.value.imageUrl,
+    actors: actors.value
+  };
+
+  try {
+    const res = await fetch("http://localhost:3000/api/add/film", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) throw new Error("Failed to add film");
+    const data = await res.json();
+    console.log("Film added:", data);
+
+    // reset form
+    film.value = { 
+        title: "", 
+        description: "", 
+        releaseDate: "", 
+        imageUrl: "" 
+    };
+    
+    actors.value = [""];
+    closeFilmModal();
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 
@@ -255,6 +325,10 @@ onUnmounted( async () => {
     color: gold;
     font-family: 'Cinzel', serif;
     box-shadow: 0 0 20px gold;
+    max-height: 80vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: gold black;
 }
 
 .close-btn {
@@ -391,11 +465,17 @@ input[type="url"]:focus {
 }
 
 input[type="url"]:not(:focus):valid {
-  border-bottom: 2px solid rgb(129, 110, 2);
+    border-bottom: 2px solid rgb(129, 110, 2);
 }
 
 textarea:focus:valid{
     text-shadow: 4px 0px 5px goldenrod;
+}
+
+.form-scroll {
+    overflow-y: auto;
+    max-height: 60vh;
+    padding-right: 10px;
 }
 
 
