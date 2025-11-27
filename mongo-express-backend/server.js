@@ -98,6 +98,30 @@ app.get("/api/actors", async (req, res) => {
   }
 });
 
+app.post("/api/add/actor", async (req, res) => {
+  try {
+    const db = await getDB();
+    const actorCollection = db.collection("Actors");
+
+    const actor = req.body;
+
+    const result = await actorCollection.insertOne({
+      name: actor.name,
+      age: actor.age,
+      imageurl: actor.imageurl
+    });
+
+    return res.status(201).json({
+      message: "Film added successfully",
+      insertedId: result.insertedId
+    });
+
+  } catch (err) {
+    console.error("Error Uploading items:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 
 // ----------------------
 // Start the Server

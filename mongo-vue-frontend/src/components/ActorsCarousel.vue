@@ -81,7 +81,7 @@ const showArrows = ref(false);
 const showModal = ref(false);
 const actor = ref({
   name: "",
-  age: "",
+  age: 0,
   imageurl: ""
 });
 
@@ -106,7 +106,7 @@ function closeActorModal() {
   showModal.value = false;
   actor.value = {
     name: "",
-    age: "",
+    age: 0,
     imageurl: ""
   };
 }
@@ -127,8 +127,8 @@ async function addNewActor(actor){
 async function submitActor() {
   const payload = {
     name: actor.value.name,
-    age: film.value.age,
-    imageurl: film.value.imageurl,
+    age: actor.value.age,
+    imageurl: actor.value.imageurl,
   };
 
   try {
@@ -136,23 +136,21 @@ async function submitActor() {
 
     if (res.status !== 201) throw new Error("Failed to add film");
     const data = await res.json();
-    console.log("Film added:", data);
+    console.log("Actor added:", data);
 
     // reset form
-    film.value = { 
-        name: "", 
-        description: "", 
-        releaseDate: "", 
-        imageurl: "" 
+    actor.value = { 
+        name: "",
+        age: 0,
+        imageurl: ""
     };
-    actors.value = [""];
 
-    films.value = await getFilms();
+    actors.value = await getActors();
   } catch (err) {
     console.log(err);
   } finally{
     checkOverflow();
-    closeFilmModal();
+    closeActorModal();
   }
 }
 

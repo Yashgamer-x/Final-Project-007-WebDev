@@ -2,7 +2,7 @@
 <template>
 <div id="films">
     <h1 class="text-align-center">Films</h1>
-
+    <!-- Film Carousel -->
     <div class="carousel-wrapper">
         <button class="arrow"
         v-if="showArrows"
@@ -13,7 +13,8 @@
             <div
                 v-for="(film, index) in films"
                 :key="index"
-                class="carousel-item">
+                class="carousel-item"
+                @click="openFilmModal(film)">
                 <img :src="film.imageurl" :alt="film.name" />
                 <p>{{ film.name }}</p>
             </div>
@@ -24,15 +25,36 @@
         @click="scrollRight"
         >&gt;</button>
     </div>
+    <!-- Film Modal -->
+    <div v-if="showFilmModal" class="modal-overlay">
+        <div style="position: relative;" class="modal-content">
+            <button class="close-btn" 
+        @click="closeFilmModal"
+        style="position: absolute; left: 10px; top: 0;">Close</button>
+            <h2>
+                {{ showFilmModalObject.name }} 
+                ({{ new Date(showFilmModalObject.releaseDate).toLocaleDateString('en-US') }})
+            </h2>
+            <div class="form-scroll">
+                <img style="border-radius: 10px; width:20rem; height: auto;" :src="showFilmModalObject.imageurl" 
+                :alt="showFilmModalObject.name" />
+                <p class="text-align-justify padding-horizontal-20px text-shadow-bond-description">
+                    {{ showFilmModalObject.description }}
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- Add Film Button -->
     <div class="add-film-wrapper">
         <button class="add-film-btn"
-        @click="openFilmModal">Add Film</button>
+        @click="openAddFilmModal">Add Film</button>
     </div>
-    <!-- Modal -->
-    <div v-if="showModal" class="modal-overlay">
-      <div style="position: relative;" class="modal-content">
+    <!-- Add Modal -->
+    <div v-if="showAddModal" class="modal-overlay">
+      <div style="position: relative;" 
+      class="modal-content max-width-500px">
         <button class="close-btn" 
-        @click="closeFilmModal"
+        @click="closeAddFilmModal"
         style="position: absolute; left: 10px; top: 0;">Close</button>
         <h2>Add Film</h2>
         <div class="form-scroll">
@@ -99,7 +121,9 @@ import { ref, onMounted, onUnmounted } from "vue";
 const films = ref([]);
 const carousel = ref(null);
 const showArrows = ref(false);
-const showModal = ref(false);
+const showAddModal = ref(false);
+const showFilmModal = ref(false);
+const showFilmModalObject = ref(Object);
 const actors = ref([]);
 const film = ref({
   name: "",
@@ -123,8 +147,8 @@ function scrollRight() {
     carousel.value.scrollBy({ left: 220, behavior: "smooth" });
 }
 
-function openFilmModal(){
-    showModal.value = true;
+function openAddFilmModal(){
+    showAddModal.value = true;
 }
 
 async function getFilms() {
@@ -140,8 +164,8 @@ function addNewFilm(film){
     });
 }
 
-function closeFilmModal() {
-    showModal.value = false;
+function closeAddFilmModal() {
+    showAddModal.value = false;
     film.value = { 
         name: "", 
         description: "", 
@@ -151,10 +175,18 @@ function closeFilmModal() {
     actors.value.splice(0, actors.value.length);
 }
 
+function openFilmModal(film){
+    showFilmModal.value = true;
+    showFilmModalObject.value = film;
+}
+
+function closeFilmModal(){
+    showFilmModal.value = false;
+}
+
 function addActor() {
     actors.value.push("");
 }
-
 
 
 async function submitFilm() {
@@ -187,7 +219,7 @@ async function submitFilm() {
     console.log(err);
   } finally{
     checkOverflow();
-    closeFilmModal();
+    closeAddFilmModal();
   }
 }
 
@@ -317,7 +349,7 @@ onUnmounted( async () => {
     border: 2px solid gold;
     border-radius: 10px;
     padding: 30px;
-    width: 400px;
+    width: 70vw;
     text-align: center;
     color: gold;
     font-family: 'Cinzel', serif;
@@ -326,6 +358,10 @@ onUnmounted( async () => {
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: gold black;
+}
+
+.max-width-500px {
+    max-width: 500px;
 }
 
 .close-btn {
@@ -475,6 +511,17 @@ textarea:focus:valid{
     padding-right: 10px;
 }
 
+.text-align-justify{
+    text-align: justify;
+}
+
+.padding-horizontal-20px {
+    padding: 0 20px;
+}
+
+.text-shadow-bond-description {
+    text-shadow: 3px 0px 6px goldenrod;
+}
 
 img[src$=".svg"] {
     filter: invert(1) brightness(2);
