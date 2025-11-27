@@ -41,6 +41,17 @@
                 <p class="text-align-justify padding-horizontal-20px text-shadow-bond-description">
                     {{ showFilmModalObject.description }}
                 </p>
+                <h2>Actors</h2>
+                <ul class="actors">
+                    <li v-for="(actor, index) in showFilmModalObject.actorDetails"
+                        :key="index"
+                        class="actor-item">
+
+                        <p>{{ actor.name }}</p>
+                        <img :src="actor.imageurl"
+                            :alt="actor.name">
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
@@ -170,7 +181,7 @@ function closeAddFilmModal() {
         name: "", 
         description: "", 
         releaseDate: "", 
-        imageurl: "" 
+        imageurl: ""
     };
     actors.value.splice(0, actors.value.length);
 }
@@ -523,6 +534,29 @@ textarea:focus:valid{
 .text-shadow-bond-description {
     text-shadow: 3px 0px 6px goldenrod;
 }
+
+.actors {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0;
+}
+
+.actor-item {
+    list-style: none;
+    width: 50%;
+    box-sizing: border-box;
+    padding: 10px 20px;
+    font-size: large;
+    text-align: left;
+}
+
+.actor-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
 
 img[src$=".svg"] {
     filter: invert(1) brightness(2);

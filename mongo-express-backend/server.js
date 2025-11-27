@@ -3,7 +3,7 @@ import express, { json } from "express";   // Web framework for building API rou
 import cors from "cors";        // Enables cross-origin requests (Vue → Express)
 import { getDB } from "./db.js"; // Custom function to connect to MongoDB Atlas
 import dotenv from "dotenv";     // Loads environment variables from .env
-
+import { ObjectId } from "mongodb";
 // Load environment variables (PORT, MONGO_URI, etc.)
 dotenv.config();
 
@@ -33,18 +33,25 @@ app.get("/", (req, res) => {
   res.send("API is running!");
 });
 
-// GET /api/books
-// Fetches all book documents from MongoDB Atlas
+
 app.get("/api/films", async (req, res) => {
   try {
     // Connect to MongoDB (cached connection in db.js)
     const db = await getDB();
-
-    // Fetch all documents from the "Books" collection
-    const items = await db.collection("Movies").find().toArray();
+    // Lookup, From actors collection, field is actors from Movies, the foreign field _id, and returns the results as actorDetails
+    const films = await db.collection("Movies").aggregate([
+      {
+        $lookup: {
+          from: "Actors",
+          localField: "actors",
+          foreignField: "_id",
+          as: "actorDetails"
+        }
+      }
+    ]).toArray();
 
     // Send JSON response back to frontend
-    res.json(items);
+    res.json(films);
   } catch (err) {
     // Log errors to backend console
     console.error("Error fetching items:", err);
@@ -58,14 +65,19 @@ app.post("/api/add/film", async (req, res) => {
   try {
     const db = await getDB();
     const filmCollection = db.collection("Movies");
-
     const film = req.body;
-
+    const filmActors = film.actors;
+    const actorCollection = db.collection("Actors");
+    const matchingActors = await actorCollection
+    .find({ name: { $in: filmActors } })
+    .toArray();
+    const actorsObjectId = matchingActors.map(actor => actor._id);
     const result = await filmCollection.insertOne({
       name: film.name,
       description: film.description,
       releaseDate: new Date(film.releaseDate),
-      imageurl: film.imageurl
+      imageurl: film.imageurl,
+      actors: actorsObjectId
     });
 
     return res.status(201).json({
@@ -76,6 +88,27 @@ app.post("/api/add/film", async (req, res) => {
   } catch (err) {
     console.error("Error Uploading items:", err);
     return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.get("/api/actor/:id", async (req, res) => {
+  try {
+    const actorId = req.params.id;
+    if (!ObjectId.isValid(actorId)) {
+      return res.status(400).json({ error: "Invalid actor ID format" });
+    }
+    const db = await getDB();
+    const actorCollection = db.collection("Actors");
+    const actor = await actorCollection.findOne({ _id: new ObjectId(actorId) });
+
+    if (!actor) {
+      return res.status(404).json({ error: "Actor not found" });
+    }
+    res.json(actor);
+
+  } catch (err) {
+    console.error("Error fetching actor by ID:", err);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 

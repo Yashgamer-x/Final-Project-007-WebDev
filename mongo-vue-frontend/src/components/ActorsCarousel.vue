@@ -16,7 +16,7 @@
           class="carousel-item"
         >
           <img :src="actor.imageurl" :alt="actor.name" />
-          <p>{{ actor.name }}</p>
+          <p>{{ actor.name }} ({{ actor.age }})</p>
         </div>
       </div>
 
