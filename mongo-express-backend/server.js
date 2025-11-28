@@ -30,7 +30,7 @@ app.use(express.json());
 // Health check route (optional)
 // Used to confirm the backend is running
 app.get("/", (req, res) => {
-  res.send("API is running!");
+  res.redirect("https://web-app-assignment-2.onrender.com/");
 });
 
 
@@ -58,6 +58,27 @@ app.get("/api/films", async (req, res) => {
 
     // Send generic error to frontend
     res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.get("/api", async (req, res) =>{
+  try {
+    const db = await getDB();
+
+    const filmCollection = db.collection("Movies");
+    const actorCollection = db.collection("Actors");
+
+    const films = await filmCollection.find().toArray();
+    const actors = await actorCollection.find().toArray();
+
+    res.json({
+      films: films,
+      actors: actors
+    });
+
+  } catch (err) {
+    console.log("error:", err);
+    res.status(500).json({ error: "something went wrong" });
   }
 });
 

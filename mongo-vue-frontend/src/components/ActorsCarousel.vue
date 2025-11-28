@@ -40,10 +40,10 @@
         <div class="form-scroll">
             <form @submit.prevent="submitActor">
                 <fieldset>
-                    <legend>Title</legend>
+                    <legend>Name</legend>
                     <input type="text" 
                     v-model="actor.name"
-                    placeholder="No Time to Die" 
+                    placeholder="Pierce Brosnan" 
                     required />
                 </fieldset>
                 <fieldset>
