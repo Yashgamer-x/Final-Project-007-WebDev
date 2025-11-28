@@ -31,6 +31,9 @@
             <button class="close-btn" 
             @click="closeFilmModal"
             style="position: absolute; left: 10px; top: 0;">Close</button>
+            <button class="close-btn" 
+            @click="deleteFilmModal(showFilmModalObject)"
+            style="position: absolute; font-size: 32px; right: 10px; top: 0;">&#128465;</button>
             <h2>
                 {{ showFilmModalObject.name }} 
                 ({{ new Date(showFilmModalObject.releaseDate).toLocaleDateString('en-US') }})
@@ -199,6 +202,20 @@ function addActor() {
     actors.value.push("");
 }
 
+function deleteFilmModal(filmModalObject) {
+  fetch("http://localhost:3000/api/film", {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(filmModalObject)
+  })
+  .then((res) => {
+    if(res.status === 200){
+        const index = films.value.findIndex(film => film._id === filmModalObject._id);
+        if (index !== -1) films.value.splice(index, 1);
+        showFilmModal.value = false;
+    }
+  });
+}
 
 async function submitFilm() {
   const payload = {

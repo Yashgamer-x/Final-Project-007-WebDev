@@ -91,6 +91,29 @@ app.post("/api/add/film", async (req, res) => {
   }
 });
 
+app.delete("/api/film", async (req, res) => {
+  try {
+    const db = await getDB();
+    const film = req.body;
+
+    if (!film || !film._id) {
+      return res.status(400).json({ error: "Missing film ID" });
+    }
+
+    const filmId = ObjectId.createFromHexString(film._id);
+    const result = await db.collection("Movies").deleteOne({ _id: filmId });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ error: "Film not found" });
+    }
+
+    return res.status(200).json({ success: true });
+  } catch (err) {
+    console.error("Error deleting film:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 app.get("/api/actor/:id", async (req, res) => {
   try {
     const actorId = req.params.id;
