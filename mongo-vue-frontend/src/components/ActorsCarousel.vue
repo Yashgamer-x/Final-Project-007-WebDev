@@ -112,12 +112,12 @@ function closeActorModal() {
 }
 
 async function getActors() {
-  const actors = await fetch("http://localhost:3000/api/actors");
+  const actors = await fetch("https://final-project-007-webdev.onrender.com/api/actors");
   return actors.json();
 }
 
 async function addNewActor(actor){
-  return fetch("http://localhost:3000/api/add/actor", {
+  return fetch("https://final-project-007-webdev.onrender.com/api/add/actor", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(actor)

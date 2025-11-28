@@ -166,12 +166,12 @@ function openAddFilmModal(){
 }
 
 async function getFilms() {
-  const res = await fetch("http://localhost:3000/api/films");
+  const res = await fetch("https://final-project-007-webdev.onrender.com/api/films");
   return res.json();
 }
 
 function addNewFilm(film){
-    return fetch("http://localhost:3000/api/add/film", {
+    return fetch("https://final-project-007-webdev.onrender.com/api/add/film", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(film)
@@ -203,7 +203,7 @@ function addActor() {
 }
 
 function deleteFilmModal(filmModalObject) {
-  fetch("http://localhost:3000/api/film", {
+  fetch("https://final-project-007-webdev.onrender.com/api/film", {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(filmModalObject)
